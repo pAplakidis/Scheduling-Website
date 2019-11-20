@@ -1,6 +1,43 @@
 <?php
 include('classes/DB.php');
 
+if(isset($_POST['register']))
+{
+    $username =  $_POST['username'];
+    $password = $_POST['password'];
+
+    if(!DB::query('SELECT username FROM users WHERE username=:username', array(':username'=>$username)))
+    {
+        if(strlen($username) >= 3 && strlen($username) <= 32)
+        {
+            if(preg_match('/[a-zA-Z0-9_]+/', $username))
+            {
+                if(strlen($password) >= 6 && strlen($password) <= 60)
+                {
+                    DB::query('INSERT INTO users VALUES (\'\', :username, :password, \'0\')', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
+                    echo "Registered Successfully!";
+                }
+                else
+                {
+                    echo "Invalid Password Length (must be 6 to 60 chars long)";
+                }
+            }
+            else
+            {
+                echo "Invalid Username Characters (must be a-z, A-z, 0-9 and can contain _)";
+            }
+        }
+        else
+        {
+            echo "Invalid Username Length (must be 3 to 32 characters long)";
+        }
+    }
+    else
+    {
+        echo "User Already Exists!";
+    }
+}
+
 ?>
 
 <h1>Register</h1>
