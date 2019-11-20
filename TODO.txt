@@ -1,6 +1,7 @@
 backend:
 - create sql database (users table)
 - finish login.php
+- create a token DB to store cookies for login.php
 
 frontend:
 - finish index.html (simple intro and links to login and register) and add css to it
