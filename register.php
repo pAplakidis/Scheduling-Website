@@ -14,7 +14,7 @@ if(isset($_POST['register']))
             {
                 if(strlen($password) >= 6 && strlen($password) <= 60)
                 {
-                    DB::query('INSERT INTO users VALUES (\'\', :username, :password, \'0\')', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
+                    DB::query('INSERT INTO users VALUES (\'\', :username, :password)', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
                     echo "Registered Successfully!";
                 }
                 else
