@@ -16,6 +16,8 @@ if(isset($_POST['register']))
                 {
                     DB::query('INSERT INTO users VALUES (\'\', :username, :password)', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
                     echo "Registered Successfully!";
+                    // redirect to menu
+                    header("Location: pages/menu.html");
                 }
                 else
                 {

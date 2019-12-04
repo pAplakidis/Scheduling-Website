@@ -11,8 +11,8 @@ if(isset($_POST['login']))
         if(password_verify($password, DB::query('SELECT password from users WHERE username=:username', array(':username'=>$username))[0]['password']))
         {
             echo 'Login Successfull!';
-
-            // Give user a cookie/token to know that he is logged in
+            // redirect to menu page
+            header("Location: pages/menu.html");
         }
         else
         {
