@@ -1,5 +1,5 @@
 <?php
-include('classes/DB.php');
+include('../classes/DB.php');
 
 if(isset($_POST['login']))
 {
@@ -12,11 +12,12 @@ if(isset($_POST['login']))
         {
             echo 'Login Successfull!';
             // redirect to menu page
-            header("Location: pages/menu.html");
+            header("Location: menu.html");
         }
         else
         {
-            echo "Incorrect Credentials";
+            echo "Incorrect Password";  // for debugging
+            //echo "Incorrect Credentials";
         }
     }
     else
@@ -24,7 +25,8 @@ if(isset($_POST['login']))
         // For security purposes, the ERROR message is not
         // accurate to not indicate whether the client has
         // found a correct username or not
-        echo "Incorrect Credentials";
+        //echo "Incorrect Credentials";
+        echo "Username not found";  // for debugging
     }
 }
 

@@ -1,5 +1,5 @@
 <?php
-include('classes/DB.php');
+include('../classes/DB.php');
 
 if(isset($_POST['register']))
 {
@@ -14,10 +14,11 @@ if(isset($_POST['register']))
             {
                 if(strlen($password) >= 6 && strlen($password) <= 60)
                 {
-                    DB::query('INSERT INTO users VALUES (\'\', :username, :password)', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
+                  DB::query('INSERT INTO users VALUES (\'\', :username, :password)', array(':username'=>$username, ':password'=>password_hash($password, PASSWORD_BCRYPT)));
+
                     echo "Registered Successfully!";
                     // redirect to menu
-                    header("Location: pages/menu.html");
+                    header("Location: menu.html");
                 }
                 else
                 {
@@ -31,12 +32,12 @@ if(isset($_POST['register']))
         }
         else
         {
-            echo "Invalid Username Length (must be 3 to 32 characters long)";
-        }
+            echo "Invalid Username Length (must be 3 to 32 characters long)"; }
     }
     else
     {
         echo "User Already Exists!";
+        header("Location: menu.html");
     }
 }
 

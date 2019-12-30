@@ -1,9 +1,10 @@
 backend:
-- create sql database (users table)
-- finish login.php
-- create a token DB to store cookies for login.php
+- create sql database (users table, limitations table)
+- create an upload script for limitations file and finish up the limitations form
+- create the algorithm that takes the limitations from the database and generates a schedule
 
 frontend:
 - finish index.html (simple intro and links to login and register) and add css to it
 - make a page called schedule.html which calls the js file (this page can only be accessed if user is logged in, will be redirected there after registration or login)
-- code schedule.js
+- code schedule_gui.js
+
