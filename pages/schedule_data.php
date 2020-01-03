@@ -29,6 +29,7 @@ if(isset($_POST['submit']))
 <br><br>
 
 <h2>Or upload a .json file with the restriciton data</h2>
+<!-- after uploading the file just open it and upload the data to the sql table -->
 <form action='upload.php' method="post" enctype="multipart/form-data">
   Select a json file to upload
   <input type="file" name="fileToUpload" id="fileToUpload">
