@@ -1,5 +1,7 @@
 <?php
 
+# TODO: modify this to fit the new database
+
 if(isset($_POST['submit']))
 {
   // TODO: check if the fields have values
