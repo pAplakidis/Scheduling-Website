@@ -1,0 +1,8 @@
+create user:
+create user 'guest'@'localhost' identified by 'password_of_your_choice';
+dont forget to grant all permissions for the database you want to this user
+
+connect:
+mysql -u guest -p
+then give the password you created the user with
+

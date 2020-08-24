@@ -8,5 +8,6 @@
 ?>
 
 <form>
-    <input type="button" name="generate" placeholder="Generate Schedule">
+  <!-- <input type="button" name="generate" placeholder="Generate Schedule"> -->
+  <button type="button" name="generate">Generate Schedule</button>
 </form>
