@@ -1,14 +1,15 @@
 <?php
-// database name: Schedule-Website
+// database name: schedule_website
 class DB
 {
     private static function connect()
     {
-		// NOTE: change the password field every time you connect to mysql
-	    $pdo = new PDO('mysql:host=127.0.0.1;dbname=scheduling website;charset=utf8', 'root', '');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      // !!!NOTE!!!: always leave your mysql password as "" from the dbpasswd variable for security
+      $dbpasswd = "";   // change the password field when you connect to mysql
+	    $pdo = new PDO('mysql:host=127.0.0.1;dbname=scheduling_website;charset=utf8', 'root', $dbpasswd);
+      $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        return $pdo;
+      return $pdo;
     }
 
     public static function query($query, $params = array()){

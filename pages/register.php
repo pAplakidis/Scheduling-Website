@@ -1,6 +1,8 @@
 <?php
 include('../classes/DB.php');
 
+// NOTE: use test, password as creds for testing registration authentication
+
 if(isset($_POST['register']))
 {
     $username =  $_POST['username'];
