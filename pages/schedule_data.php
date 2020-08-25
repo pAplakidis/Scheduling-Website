@@ -1,52 +1,62 @@
 <?php
+include('../classes/DB.php');
 
-# TODO: modify this to fit the new database
-
+// TODO: work on the upload script (save the file, check parameters, etc)
 if(isset($_POST['submit']))
 {
-  // TODO: check if the fields have values
-  // TODO: add an id to classes in databasee 
   $teaher_name = $_POST['teacher_name'];
   $class_name = $_POST['title'];
+  $room_name = $_POST['room_name'];
   $num_students = $_POST['num_students'];
 
-  $days_avail = array();
+  // 0: monday, 1: tuesday, 2: wednesday, 3: thirsday, 4: friday
+  $days_avail = "";
 
   if(isset($_POST['monday']))
   {
-    array_push($days_avail, "monday");
+    $days_avail .= "0,";
   }
   
   if(isset($_POST['tuesday']))
   {
-    array_push($days_avail, "tuesday");
+    $days_avail .= "1,";
   }
 
    if(isset($_POST['wednesday']))
   {
-    array_push($days_avail, "wednesday");
+    $days_avail .= "2,";
   }
 
  if(isset($_POST['thursday']))
   {
-    array_push($days_avail, "thursday");
+    $days_avail .= "3,";
   }
  
   if(isset($_POST['friday']))
   {
-    array_push($days_avail, "friday");
+    $days_avail .= "4,";
   }
 
   if(isset($_POST['start_time']) && isset($_POST['end_time']))
   {
-    $hours_avail = array($start_time, $end_time); 
+    $hours_avail = $start_time . "," . $end_time;
   }
 
-  $room_name = $_POST['room_name'];
 
-  // TODO: find a way to insert array into database
-  DB::query('INSERT INTO classes VALUES (:teacher_name, :class_name, :num_students, :days_avail, :hours_avail, :room_name)', array(':techer_name'=>$teacher_name, ':class_name'=>$class_name, ':num_students'=>$num_students, ':days_avail'=>$days_avail, ':hours_avail'=>$hours_avail, ':room_name'=>$room_name));
-  echo "Restrictions added to database!";
+  // TODO: debug this query (error 500)
+  /*
+    ERROR MESSAGE:
+    PHP Warning:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/paul/dev/university/Scheduling-Website/classes/DB.php:17
+    Stack trace:
+    #0 /home/paul/dev/university/Scheduling-Website/classes/DB.php(17): PDOStatement->execute(Array)
+    #1 php shell code(1): DB::query('INSERT INTO cla...', Array)
+    #2 {main}
+      thrown in /home/paul/dev/university/Scheduling-Website/classes/DB.php on line 17
+  */
+  if(isset($_POST['submit'])){
+    DB::query('INSERT INTO classes VALUES (:teacher_name, :class_name, :room_name, :num_students, :days_avail, :hours_avail)', array(':teacher_name'=>$teacher_name, ':class_name'=>$class_name, ':room_name'=>$room_name, ':num_students'=>$num_students, ':days_avail'=>$days_avail, ':hours_avail'=>$hours_avail));
+    echo "Restrictions added to database!";
+  }
 }
 
 ?>
@@ -56,6 +66,7 @@ if(isset($_POST['submit']))
 <form class="schedule.js" method="post">
     <input type="text" name="teacher_name" placeholder="Lecturer Name"><p />
     <input type="text" name="title" placeholder="Lecture Title"><p />
+    <input type="text" name="room_name" placeholder="Room Name"><p />
     Number of Students (1 to 500) <input type="number" name="num_students" min="1" max="500"><p />
     
     Days the teacher is available<br>
@@ -71,7 +82,6 @@ if(isset($_POST['submit']))
     To <input type ="number" name="end_time" min="9" max="21">
     <p />
 
-    <input type="text" name="room_name" placeholder="Room Name"><p />
     <input type="submit" name="submit" value="Submit">
 </form>
 

@@ -9,6 +9,8 @@ create table if not exists classes(
   title varchar (64) not null,
   c_room_name varchar (16) not null,
   num_students int not null,
+  days_avail varchar (16) not null,
+  hours_avail varchar (8) not null
 );
 
 -- Create the users database for authentication
