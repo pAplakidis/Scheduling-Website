@@ -4,55 +4,46 @@ include('../classes/DB.php');
 // TODO: work on the upload script (save the file, check parameters, etc)
 if(isset($_POST['submit']))
 {
-  $teaher_name = $_POST['teacher_name'];
+  $teacher_name = $_POST['teacher_name'];
   $class_name = $_POST['title'];
   $room_name = $_POST['room_name'];
-  $num_students = $_POST['num_students'];
+  $num_students = intval($_POST['num_students']);
 
   // 0: monday, 1: tuesday, 2: wednesday, 3: thirsday, 4: friday
   $days_avail = "";
-
   if(isset($_POST['monday']))
   {
     $days_avail .= "0,";
   }
-  
   if(isset($_POST['tuesday']))
   {
     $days_avail .= "1,";
   }
-
-   if(isset($_POST['wednesday']))
+  if(isset($_POST['wednesday']))
   {
     $days_avail .= "2,";
   }
-
- if(isset($_POST['thursday']))
+  if(isset($_POST['thursday']))
   {
     $days_avail .= "3,";
   }
- 
   if(isset($_POST['friday']))
   {
     $days_avail .= "4,";
   }
+  if($days_avail != ""){
+    $days_avail = substr($days_avail, 0, -1);
+  }
 
   if(isset($_POST['start_time']) && isset($_POST['end_time']))
   {
-    $hours_avail = $start_time . "," . $end_time;
+    $hours_avail = $_POST['start_time'] . "," . $_POST['end_time'];
+  }
+  if($hours_avail != ""){
+    $hours_avail = substr($hours_avail, 0, -1);
   }
 
 
-  // TODO: debug this query (error 500)
-  /*
-    ERROR MESSAGE:
-    PHP Warning:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined in /home/paul/dev/university/Scheduling-Website/classes/DB.php:17
-    Stack trace:
-    #0 /home/paul/dev/university/Scheduling-Website/classes/DB.php(17): PDOStatement->execute(Array)
-    #1 php shell code(1): DB::query('INSERT INTO cla...', Array)
-    #2 {main}
-      thrown in /home/paul/dev/university/Scheduling-Website/classes/DB.php on line 17
-  */
   if(isset($_POST['submit'])){
     DB::query('INSERT INTO classes VALUES (:teacher_name, :class_name, :room_name, :num_students, :days_avail, :hours_avail)', array(':teacher_name'=>$teacher_name, ':class_name'=>$class_name, ':room_name'=>$room_name, ':num_students'=>$num_students, ':days_avail'=>$days_avail, ':hours_avail'=>$hours_avail));
     echo "Restrictions added to database!";

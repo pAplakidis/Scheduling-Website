@@ -5,7 +5,9 @@ class DB
   private static function connect()
   {
     // !!!NOTE!!!: always leave your mysql password as "" from the dbpasswd variable for security
+
     $dbpasswd = "";   // change the password field to whatever you gave to 'guest' user as password
+    
     $pdo = new PDO('mysql:host=127.0.0.1;dbname=scheduling_website;charset=utf8', 'guest', $dbpasswd);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       
