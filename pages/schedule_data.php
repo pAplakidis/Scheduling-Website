@@ -2,6 +2,9 @@
 include('../classes/DB.php');
 
 // TODO: work on the upload script (save the file, check parameters, etc)
+// TODO: add a Clear Restrictions Button
+// TODO: add a link to the algorithm page
+
 if(isset($_POST['submit']))
 {
   $teacher_name = $_POST['teacher_name'];
@@ -38,9 +41,6 @@ if(isset($_POST['submit']))
   if(isset($_POST['start_time']) && isset($_POST['end_time']))
   {
     $hours_avail = $_POST['start_time'] . "," . $_POST['end_time'];
-  }
-  if($hours_avail != ""){
-    $hours_avail = substr($hours_avail, 0, -1);
   }
 
 
