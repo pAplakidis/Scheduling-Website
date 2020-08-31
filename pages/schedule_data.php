@@ -3,7 +3,6 @@ include('../classes/DB.php');
 
 // TODO: work on the upload script (save the file, check parameters, etc)
 // TODO: add a Clear Restrictions Button
-// TODO: add a link to the algorithm page
 
 if(isset($_POST['submit']))
 {
@@ -86,4 +85,9 @@ if(isset($_POST['submit']))
   <br>
   <input type="submit" value="Upload Image" name="submit">
 </form>
+<a href='schedule_alg.php'>Go To Generate Schedule</a>
+<br>
+<a href='../index.html'>Home</a>
+<br>
+<a href='menu.html'>Menu</a>
 

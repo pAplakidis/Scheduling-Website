@@ -51,3 +51,5 @@ if(isset($_POST['register']))
     <input type="password" name="password" placeholder="Password"><p />
     <input type="submit" name="register" value="Register">
 </form>
+<a href='../index.html'>Home</a>
+

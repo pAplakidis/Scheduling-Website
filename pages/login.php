@@ -38,3 +38,5 @@ if(isset($_POST['login']))
     <input type="password" name="password" placeholder="Password"><p />
     <input type="submit" name="login" value="Log In">
 </form>
+<br>
+<a href='../index.html'>Home</a>

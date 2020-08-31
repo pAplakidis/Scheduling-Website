@@ -6,8 +6,6 @@
 
 include("../classes/DB.php");
 
-// TODO: add a link to give data again!!!
-
 // DEBUG: SHOW ERRORS
 // TODO: remove this when done
 ini_set('display_errors', '1');
@@ -58,4 +56,9 @@ if(isset($_GET['generate'])){
 <form>
   <a href='schedule_alg.php?generate=true'><button type="button">Generate Schedule</button></a>
 </form>
+<a href='schedule_data.php'>Give Data</a>
+<br>
+<a href='../index.html'>Home</a>
+<br>
+<a href='menu.html'>Menu</a>
 
