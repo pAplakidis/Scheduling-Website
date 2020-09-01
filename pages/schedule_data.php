@@ -8,7 +8,11 @@ if(isset($_POST['submit']))
 {
   $teacher_name = $_POST['teacher_name'];
   $class_name = $_POST['title'];
+
+  // TODO: make this a choice between A1-A6
+  // TODO: OR MAKE THIS GET GENERATED WITH THE SCHEDULE
   $room_name = $_POST['room_name'];
+  
   $num_students = intval($_POST['num_students']);
 
   // 0: monday, 1: tuesday, 2: wednesday, 3: thirsday, 4: friday
@@ -56,7 +60,17 @@ if(isset($_POST['submit']))
 <form class="schedule.js" method="post">
     <input type="text" name="teacher_name" placeholder="Lecturer Name"><p />
     <input type="text" name="title" placeholder="Lecture Title"><p />
-    <input type="text" name="room_name" placeholder="Room Name"><p />
+
+    <label for="room_name">Choose a classroom you would prefer (not guaranteed, will depend on other lectures)</label>
+    <select name="room_name" id="room_name">
+      <option value="A1">A1</option>
+      <option value="A2">A2</option>
+      <option value="A3">A3</option>
+      <option value="A4">A4</option>
+      <option value="A5">A5</option>
+      <option value="A6">A6</option>
+    </select> <p />
+    
     Number of Students (1 to 500) <input type="number" name="num_students" min="1" max="500"><p />
     
     Days the teacher is available<br>

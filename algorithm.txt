@@ -1,0 +1,39 @@
+TODO: need to distribute them evenly as well (all days should try to have an equal number of classes)
+
+ALL LECTURES LAST 3 HOURS EACH
+
+for lecture in lectures:
+
+  // check for the given classroom
+  if the classroom that the teacher wants is available any day for the whole day:
+    add lecture there
+    continue
+  else if the classroom is taken all days:
+    for day in days:
+      check for a day where the specific room is available for specific hour
+      if found day and hour available for desired room and teacher:
+        add lecture there
+        continue
+  else:
+    // TODO: modify the following algorithm to work with the above (maybe?)
+
+    // check for whatever classroom
+    for day in days:
+      if day is empty:
+        add lecture if teacher is available that day
+        break
+    // if no day is empty
+    for day in days:
+      if there is an empty room for the day:
+        add class in this day
+        break
+      else (all rooms are taken for specific hours today):
+        find a suitable hour where the teacher and the room are available at the same time
+        add lecture in this day
+        break
+
+  if nothing is available for no day:
+    print "Cannot add lecture.title to the schedule"
+    
+    
+

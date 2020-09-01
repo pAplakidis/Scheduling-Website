@@ -15,6 +15,7 @@ error_reporting(E_ALL);
 class Lecture{
   public $teacher_name;
   public $class_name;
+  // TODO: !!!maybe make classroom get generated automatically depending on the restrictions!!!
   public $room_name;
   public $num_students;
   public $days_avail;
@@ -43,8 +44,26 @@ function get_data(){
   return $classes;
 }
 
+function create_schedule($classes){
+  // TODO: is the 2nd week a copy of the 1st or extra space for lectures???
+  $days = array();  // week 1: 0-6, week2: 7-13
+
+  print_r($classes);
+
+  // TODO: need to take into account the days and hours avail
+  // TODO: evenly distribute lectures for two weeks
+
+  return $days;
+}
+
+function print_weeks($days){
+  print_r($days);
+}
+
 function generate(){
   $classes = get_data();
+  $days = create_schedule($classes);
+  //print_weeks($days);
 }
 
 // MAIN
