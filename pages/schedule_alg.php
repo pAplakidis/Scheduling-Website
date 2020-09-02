@@ -15,7 +15,6 @@ error_reporting(E_ALL);
 class Lecture{
   public $teacher_name;
   public $class_name;
-  // TODO: !!!maybe make classroom get generated automatically depending on the restrictions!!!
   public $room_name;
   public $num_students;
   public $days_avail;
@@ -44,26 +43,82 @@ function get_data(){
   return $classes;
 }
 
-function create_schedule($classes){
-  // TODO: is the 2nd week a copy of the 1st or extra space for lectures???
-  $days = array();  // week 1: 0-6, week2: 7-13
+// TODO: make this work otherwise all classes are put in one day (or bruteforced)
+// TODO: go through all days and pick one that distributes the lectures evenly
+// returns an int 1-14 representing the optimal day from a set of available days
+function find_opt_day($days, $idxs){
 
-  print_r($classes);
+  print_r($idxs);
+  echo "<br><br>";
+
+  // for debugging;
+  $best_day = $idxs[0];
+ 
+ return $best_day+1;
+}
+
+function room_avail_all_day($days, $room){
+  // TODO: check which days the given room is available all day and return the day that distributes it best
+  // NOTE: for this to work with if statement, return array_idx+1 (1-14)
+  $candidate_days = array();  // array of possible days the room can be added
+
+  foreach($days as $idx=>$day){
+    if(count($day) == 0){
+      array_push($candidate_days, $idx);
+    }
+    else{
+      // loop through day's lectures
+      $room_taken = false;
+      foreach($day as $i=>$lecture){
+        if(strcmp($lecture->room_name, $room) == 0){
+          $room_taken = true;
+          break;
+        }
+      }
+      if(!$room_taken){
+        array_push($candidate_days, $idx);
+      }
+    }
+  }
+  return find_opt_day($days, $candidate_days);
+}
+
+function create_schedule($classes){
+  $days = array();  // week 1: 0-6, week2: 7-13
+  $days = array_pad($days, 14, array()); // each day is an array of lecture objects
 
   // TODO: need to take into account the days and hours avail
   // TODO: evenly distribute lectures for two weeks
+
+  $i = 0;
+  foreach($classes as $lecture){
+    echo "lecture " . $i . "<br>";
+    $i++;
+
+    // TODO: implement the algorithm from algorithm.txt here:
+    if($day_idx = room_avail_all_day($days, $lecture->room_name)){
+      array_push($days[$day_idx-1], $lecture);
+      continue;
+    }
+    // if the room is taken every day for whatever hours
+    else{
+
+    }
+  }
 
   return $days;
 }
 
 function print_weeks($days){
+  echo "<br><br>";
   print_r($days);
+  // TODO: order each day's lecture objects by time
 }
 
 function generate(){
   $classes = get_data();
   $days = create_schedule($classes);
-  //print_weeks($days);
+  print_weeks($days);
 }
 
 // MAIN
