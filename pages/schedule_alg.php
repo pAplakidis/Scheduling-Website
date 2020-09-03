@@ -45,8 +45,11 @@ function get_data(){
 // returns an int 1-14 representing the optimal day from a set of available days
 function find_opt_day($days, $idxs){
 
+  // idxs contains indices of available days
   print_r($idxs);
   echo "<br><br>";
+
+  //  find the days, sort them from the least lectures to the most, pick the 1st/least_lectures day to put the class
 
   // for debugging;
   $best_day = $idxs[0];
@@ -131,7 +134,7 @@ function create_schedule($classes){
       else{
         // TODO: check for whatever classroom is available (worst case, put the lecture wherever you can)
         /*
-        if a day has less than 4 lectures add it there (find the days, sort them from the least lectures to the most, pick the 1st/least_lectures day to put the class)
+        if a day has less than 4 lectures add it there (find_opt_day will be used as well)
         */
       }
     }
