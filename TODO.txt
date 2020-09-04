@@ -1,7 +1,11 @@
 backend:
 - make an upload to the sql table
 - create an upload script for limitations file and create a script to get them to the database
-- create the algorithm that takes the limitations from the database and generates a schedule
+
+- for algorithm:
+    - code the worst case scenario (dont forget to assign new room in lectures)
+    - assign hours to the lectures
+    - print two weeks of the schedule
 
 frontend:
 - finish index.html (simple intro and links to login and register) and add css to it
