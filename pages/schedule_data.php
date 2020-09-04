@@ -49,6 +49,12 @@ if(isset($_POST['submit']))
   }
 }
 
+// TODO: test this
+if(isset($_GET['reset_db'])){
+  DB::query('TRUNCATE TABLE classes');
+  echo 'All data has been deleted';
+}
+
 ?>
 
 <h1>Restrictions</h1><p />
@@ -95,6 +101,11 @@ if(isset($_POST['submit']))
   <br>
   <input type="submit" value="Upload Image" name="submit">
 </form>
+
+<br><br>
+<a href="schedule_data.php?reset_db=true"><button type="button">Clear Data</button></a> (WARNING THIS REMOVES THE WHOLE DATA)
+<br><br>
+
 <a href='schedule_alg.php'>Go To Generate Schedule</a>
 <br>
 <a href='../index.html'>Home</a>

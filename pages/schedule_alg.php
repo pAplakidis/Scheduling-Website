@@ -1,11 +1,12 @@
 <?php
-// find mathematical equasions for the generation algorithm
-// NOTE: basic restrictions are hours and days that rooms are available AND hours and days that teachers are available
-
 include("../classes/DB.php");
 
+// find mathematical equasions for the generation algorithm
+// NOTE: basic restrictions are hours and days that rooms are available AND hours and days that teachers are available
+// TODO: test this code with different cases of lectures
+
 // DEBUG: SHOW ERRORS
-// TODO: remove this when done
+// TODO: comment this out when done
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
@@ -40,25 +41,34 @@ function get_data(){
   return $classes;
 }
 
-// TODO: make this work otherwise all classes are put in one day (or bruteforced)
-// TODO: go through all days and pick one that distributes the lectures evenly
+// go through all days and pick one that distributes the lectures evenly
 // returns an int 1-14 representing the optimal day from a set of available days
 function find_opt_day($days, $idxs){
 
-  // idxs contains indices of available days
-  print_r($idxs);
-  echo "<br><br>";
-
   //  find the days, sort them from the least lectures to the most, pick the 1st/least_lectures day to put the class
+  $sorted_idxs = array();   // 2D array [idx, num_lectures] needs to be sorted by num_lectures
 
-  // for debugging;
-  $best_day = $idxs[0];
+  // count how many lectures each day has
+  foreach($days as $idx=>$day){
+    if(in_array($idx, $idxs)){
+      $num_lectures = count($day);  // number of lectures in a day
+      array_push($sorted_idxs, array("idx"=>$idx, "lectures"=>$num_lectures));
+    }
+  }
+  array_multisort(array_column($sorted_idxs, "lectures"), SORT_ASC, $sorted_idxs);
+
+  // for debugging
+  //print_r($sorted_idxs);
+  //echo "<br><br>";
+
+  $best_day = $sorted_idxs[0]["idx"];
  
- return $best_day+1;
+  echo "==Preferred Day: " . $best_day . '<br><br>';
+  return $best_day+1;
 }
 
+// check which days the given room is available all day and return the day that distributes it best
 function room_avail_all_day($days, $room){
-  // TODO: check which days the given room is available all day and return the day that distributes it best
   // NOTE: for this to work with if statement, return array_idx+1 (1-14)
   $candidate_days = array();  // array of possible days the room can be added
 
@@ -83,7 +93,7 @@ function room_avail_all_day($days, $room){
   return find_opt_day($days, $candidate_days);
 }
 
-// TODO: find if a room is available at all
+// find if a room is available at all
 // NOTE: a room is full all day if it has 4 lectures
 function room_avail($days, $room){
   $candidate_days = array();
@@ -103,12 +113,20 @@ function room_avail($days, $room){
   return find_opt_day($days, $candidate_days);
 }
 
+// TODO: check for whatever classroom is available (worst case, put the lecture wherever you can)
+// this needs to check if a day has less than 4 lectures * 6 rooms = 24 lectures in total (need to assign the new room to the lecture, need to find the new room as well!!!)(find_opt_day will be used as well)
+function check_worst_case($days){
+  
+}
+
 // TODO: need to solve the problem of TIME (every lecture is 3 hours, need to distribute it)
 // need to take into account the days and hours avail
 // solution: get the classes in rooms and then assign hours depending on the available hours of the teachers + the remaining hours left in the day
 function assign_hours($days){
+  // TODO: this adds an hours range next to every lecture in every day (days[day[lecture, hours]])(how do i make it work???)
+  // days(day(lectures(lecture, hours))) !!!need to meddle with the array a bit!!!
 
-  return $days
+  return $days;
 }
 
 // TODO: refactor this, O(n^3)
@@ -132,12 +150,14 @@ function create_schedule($classes){
         continue;
       }
       else{
-        // TODO: check for whatever classroom is available (worst case, put the lecture wherever you can)
-        /*
-        if a day has less than 4 lectures add it there (find_opt_day will be used as well)
-        */
+        if(($day_idx = check_worst_case($days))){
+          array_push($days[$day_idx-1], $lecture);
+          continue;
+        }
       }
     }
+
+    // if no free day can be found
   }
 
   $days = assign_hours($days);
