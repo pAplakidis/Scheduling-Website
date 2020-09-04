@@ -43,6 +43,7 @@ function get_data(){
 
 // go through all days and pick one that distributes the lectures evenly
 // returns an int 1-14 representing the optimal day from a set of available days
+// NOTE: for this to work with if statement, return array_idx+1 (1-14) (if 1 then true, but to use the actual value we need to decrease it by 1, since we increased it by 1 to work with the condition)
 function find_opt_day($days, $idxs){
 
   //  find the days, sort them from the least lectures to the most, pick the 1st/least_lectures day to put the class
@@ -56,11 +57,6 @@ function find_opt_day($days, $idxs){
     }
   }
   array_multisort(array_column($sorted_idxs, "lectures"), SORT_ASC, $sorted_idxs);
-
-  // for debugging
-  //print_r($sorted_idxs);
-  //echo "<br><br>";
-
   $best_day = $sorted_idxs[0]["idx"];
  
   echo "==Preferred Day: " . $best_day . '<br><br>';
@@ -69,7 +65,6 @@ function find_opt_day($days, $idxs){
 
 // check which days the given room is available all day and return the day that distributes it best
 function room_avail_all_day($days, $room){
-  // NOTE: for this to work with if statement, return array_idx+1 (1-14)
   $candidate_days = array();  // array of possible days the room can be added
 
   foreach($days as $idx=>$day){
@@ -90,6 +85,7 @@ function room_avail_all_day($days, $room){
       }
     }
   }
+  
   return find_opt_day($days, $candidate_days);
 }
 
@@ -110,13 +106,51 @@ function room_avail($days, $room){
       array_push($candidate_days, $idx);
     }
   }
+
   return find_opt_day($days, $candidate_days);
 }
 
-// TODO: check for whatever classroom is available (worst case, put the lecture wherever you can)
-// this needs to check if a day has less than 4 lectures * 6 rooms = 24 lectures in total (need to assign the new room to the lecture, need to find the new room as well!!!)(find_opt_day will be used as well)
-function check_worst_case($days){
-  
+// count different rooms and lectures in the in the candidate days and choose whatever room has less than 4 lectures in the day
+function find_room($candidate_days, $days, $lecture){
+ 
+  $best_day = find_opt_day($days, $candidate_days) - 1;
+
+  $lectures_in_rooms = array(); // number of lectures in specific room ("room"=> num_lectures)
+  $cnt_lec_in_room = 0;
+
+  foreach($days[$idx] as $lecture){
+    if(in_array($lecture->room_name, $lectures_in_rooms)){
+      $lectures_in_rooms[$lecture->room_name]++;
+    }
+    else{
+      $lectures_in_rooms[$lecture->room_name] = 1;
+    }
+  }
+
+  foreach($lectures_in_rooms as $room=>$num_lectures){
+    if($num_lectures < 4){
+      $lecture->room_name = $room;
+    }
+  }
+
+  return $best_day+1;
+}
+
+
+// check for whatever classroom is available (worst case, put the lecture wherever you can)
+// this checks if a day has less than 4 lectures * 6 rooms = 24 lectures in total
+function check_worst_case($days, $lecture){
+  // NOTE: we already know the other cases don't happen so there is no need to check them
+  $candidate_days = array();
+
+  foreach($days as $idx=>$day){
+    if(count($day) < 24){
+      array_push($candidate_days, $idx);
+    }
+  }
+
+  $best_day = find_room($candidate_days, $days, $lecture);
+  return $best_day;
 }
 
 // TODO: need to solve the problem of TIME (every lecture is 3 hours, need to distribute it)
@@ -129,14 +163,14 @@ function assign_hours($days){
   return $days;
 }
 
-// TODO: refactor this, O(n^3)
+// needs refactoring: O(n^3)
 function create_schedule($classes){
   $days = array();  // week 1: 0-6, week2: 7-13
   $days = array_pad($days, 14, array()); // each day is an array of lecture objects
 
   $i = 0;
   foreach($classes as $lecture){
-    echo "lecture " . $i . "<br>";
+    echo "lecture " . $i . ": " . $lecture->class_name . "<br>";
     $i++;
 
     if($day_idx = room_avail_all_day($days, $lecture->room_name)){
@@ -150,14 +184,14 @@ function create_schedule($classes){
         continue;
       }
       else{
-        if(($day_idx = check_worst_case($days))){
+        if(($day_idx = check_worst_case($days, $lecture))){
           array_push($days[$day_idx-1], $lecture);
           continue;
         }
       }
     }
-
     // if no free day can be found
+    echo 'Lecture ' . $lecture->class_name . ' counld not be added in the schedule<br>';
   }
 
   $days = assign_hours($days);
@@ -167,7 +201,7 @@ function create_schedule($classes){
 function print_weeks($days){
   echo "<br><br>";
   print_r($days);
-  // TODO: order each day's lecture objects by time
+  // TODO: order each day's lecture objects by time range
 }
 
 function generate(){

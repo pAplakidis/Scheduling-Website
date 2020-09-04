@@ -3,9 +3,10 @@ backend:
 - create an upload script for limitations file and create a script to get them to the database
 
 - for algorithm:
-    - code the worst case scenario (dont forget to assign new room in lectures)
     - assign hours to the lectures
     - print two weeks of the schedule
+
+- clean up the comments/code
 
 frontend:
 - finish index.html (simple intro and links to login and register) and add css to it
