@@ -24,8 +24,8 @@ class Lecture{
     $this->class_name = $class_name;
     $this->room_name = $room_name ;
     $this->num_students = $num_students;
-    $this->days_avail = $days_avail ;
-    $this->hours_avail = $hours_avail ;
+    $this->days_avail = explode(",", $days_avail); // array split by ,
+    $this->hours_avail = explode(",", $hours_avail); // array split by ,
   }
 }
 
@@ -44,14 +44,14 @@ function get_data(){
 // go through all days and pick one that distributes the lectures evenly
 // returns an int 1-14 representing the optimal day from a set of available days
 // NOTE: for this to work with if statement, return array_idx+1 (1-14) (if 1 then true, but to use the actual value we need to decrease it by 1, since we increased it by 1 to work with the condition)
-function find_opt_day($days, $idxs){
+function find_opt_day($days, $idxs, $days_avail){
 
   //  find the days, sort them from the least lectures to the most, pick the 1st/least_lectures day to put the class
   $sorted_idxs = array();   // 2D array [idx, num_lectures] needs to be sorted by num_lectures
 
   // count how many lectures each day has
   foreach($days as $idx=>$day){
-    if(in_array($idx, $idxs)){
+    if(in_array($idx, $idxs) && in_array($idx, $days_avail)){
       $num_lectures = count($day);  // number of lectures in a day
       array_push($sorted_idxs, array("idx"=>$idx, "lectures"=>$num_lectures));
     }
@@ -64,7 +64,7 @@ function find_opt_day($days, $idxs){
 }
 
 // check which days the given room is available all day and return the day that distributes it best
-function room_avail_all_day($days, $room){
+function room_avail_all_day($days, $room, $days_avail){
   $candidate_days = array();  // array of possible days the room can be added
 
   foreach($days as $idx=>$day){
@@ -86,12 +86,12 @@ function room_avail_all_day($days, $room){
     }
   }
   
-  return find_opt_day($days, $candidate_days);
+  return find_opt_day($days, $candidate_days, $days_avail);
 }
 
 // find if a room is available at all
 // NOTE: a room is full all day if it has 4 lectures
-function room_avail($days, $room){
+function room_avail($days, $room, $days_avail){
   $candidate_days = array();
 
   foreach($days as $idx=>$day){
@@ -107,13 +107,13 @@ function room_avail($days, $room){
     }
   }
 
-  return find_opt_day($days, $candidate_days);
+  return find_opt_day($days, $candidate_days, $days_avail);
 }
 
 // count different rooms and lectures in the in the candidate days and choose whatever room has less than 4 lectures in the day
 function find_room($candidate_days, $days, $lecture){
  
-  $best_day = find_opt_day($days, $candidate_days) - 1;
+  $best_day = find_opt_day($days, $candidate_days, $lecture->days_avail) - 1;
 
   $lectures_in_rooms = array(); // number of lectures in specific room ("room"=> num_lectures)
   $cnt_lec_in_room = 0;
@@ -153,12 +153,39 @@ function check_worst_case($days, $lecture){
   return $best_day;
 }
 
-// TODO: need to solve the problem of TIME (every lecture is 3 hours, need to distribute it)
-// need to take into account the days and hours avail
-// solution: get the classes in rooms and then assign hours depending on the available hours of the teachers + the remaining hours left in the day
+// get the classes in rooms and then assign hours depending on the available hours of the teachers + the remaining hours left in the day
 function assign_hours($days){
-  // TODO: this adds an hours range next to every lecture in every day (days[day[lecture, hours]])(how do i make it work???)
-  // days(day(lectures(lecture, hours))) !!!need to meddle with the array a bit!!!
+
+  // days(day(lectures(lecture, hours(start, finish)))) !!!need to meddle with the array a bit!!!
+  // TODO: foreach $day as $idx=>$lecture: $day[$idx] = array($lecture, hours[start, finish]);
+
+
+  // ALGORITHM: go through all lectures in the day and assign each lecture the first hour available + 3 for end
+  //            if there is already a lecture in the same room, find it's end time
+  //            if it is less than the first avail hour, add the lecture as normal
+  //            else if it is <= then assign the end_time as the starting time of the new lecture
+  //            !!! IF the end_time of the lecture > avail_hours of the new lecture:
+  //                  if the room is empty before the start_time and teacher is avail that time, add it there
+  //                  else cannot add room (remove it from the day)
+  
+  foreach($days as $day){
+    $rooms_used = array(); // list of rooms used ($rooms_used[$room_name, $lecture])
+
+    foreach($day as $idx=>$lecture){
+      if(in_array($lecture->room_name, $rooms_used)){
+        
+      }
+      // can add wherever we want, no restriction
+      else{
+        $start_time = $lecture->hours_avail[0];
+        $end_time = $start_time + 3;
+
+        echo "start time: " . $start_time . " end_time: " . $end_time . "<br>";
+        
+        $day[$idx] = array($lecture, array($start_time, $end_time));
+      }
+    }
+  }
 
   return $days;
 }
@@ -173,13 +200,13 @@ function create_schedule($classes){
     echo "lecture " . $i . ": " . $lecture->class_name . "<br>";
     $i++;
 
-    if($day_idx = room_avail_all_day($days, $lecture->room_name)){
+    if($day_idx = room_avail_all_day($days, $lecture->room_name, $lecture->days_avail)){
       array_push($days[$day_idx-1], $lecture);
       continue;
     }
     // if the room is taken every day for whatever hours
     else{
-      if(($day_idx = room_avail($days, $lecture->room_name))){
+      if(($day_idx = room_avail($days, $lecture->room_name, $lecture->days_avail))){
         array_push($days[$day_idx-1], $lecture);
         continue;
       }
@@ -206,7 +233,7 @@ function print_weeks($days){
 
 function generate(){
   $classes = get_data();
-  $days = create_schedule($classes);
+  $days = create_schedule($classes);  // days is array of day, day = [lecture object, lecture time assigned]
   print_weeks($days);
 }
 
