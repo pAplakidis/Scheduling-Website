@@ -27,6 +27,14 @@ class Lecture{
     $this->days_avail = explode(",", $days_avail); // array split by ,
     $this->hours_avail = explode(",", $hours_avail); // array split by ,
   }
+
+  // TODO: print to look like a schedule (maybe add header tags to name)
+  function print_data(){
+    echo $class_name;
+    echo "<br>";
+    echo $room_name;
+    echo "<br>";
+  }
 }
 
 function get_data(){
@@ -157,7 +165,7 @@ function check_worst_case($days, $lecture){
 function assign_hours($days){
 
   // days(day(lectures(lecture, hours(start, finish)))) !!!need to meddle with the array a bit!!!
-  // TODO: foreach $day as $idx=>$lecture: $day[$idx] = array($lecture, hours[start, finish]);
+  // foreach $day as $idx=>$lecture: $day[$idx] = array($lecture, hours[start, finish]);
 
 
   // ALGORITHM: go through all lectures in the day and assign each lecture the first hour available + 3 for end
@@ -173,7 +181,7 @@ function assign_hours($days){
 
     foreach($day as $idx=>$lecture){
       if(in_array($lecture->room_name, $rooms_used)){
-        
+        // TODO: code this
       }
       // can add wherever we want, no restriction
       else{
@@ -181,8 +189,13 @@ function assign_hours($days){
         $end_time = $start_time + 3;
 
         echo "start time: " . $start_time . " end_time: " . $end_time . "<br>";
-        
+        print_r($day[$idx]);
+        echo "<br>";
+        echo "<br>";
+
+        // TODO: FIX BUG HERE, when i print the days they dont get assigned (maybe it is like python, might need a for loop instead)!!!
         $day[$idx] = array($lecture, array($start_time, $end_time));
+        array_push($rooms_used, array($lecture->room_name, $lecture));
       }
     }
   }
@@ -229,6 +242,20 @@ function print_weeks($days){
   echo "<br><br>";
   print_r($days);
   // TODO: order each day's lecture objects by time range
+
+  foreach($days as $day){
+    foreach($day as $block){
+      // block = $lecture, [start, end]
+      //print_r($block[0]);
+      //$block[0]->print_data(); // print the data of the lecture
+      //echo $block[1][0] . " - " . $block[1][1] . ": ";
+      //echo "-------------------";
+
+      echo "<br><br>";
+      print_r($block);
+    }
+    // echo "<br>====================<br>";
+  }
 }
 
 function generate(){
