@@ -1,15 +1,7 @@
 <?php
 include("../classes/DB.php");
 
-// find mathematical equasions for the generation algorithm
-// NOTE: basic restrictions are hours and days that rooms are available AND hours and days that teachers are available
-// TODO: test this code with different cases of lectures
-
-// DEBUG: SHOW ERRORS
-// TODO: comment this out when done
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
+// NOTE: the whole algorithm is O(n^3) which is not suitable for big data
 
 class Lecture{
   public $teacher_name;
@@ -28,7 +20,6 @@ class Lecture{
     $this->hours_avail = explode(",", $hours_avail); // array split by ,
   }
 
-  // TODO: print to look like a schedule (maybe add header tags to name)
   function print_data(){
     echo $this->class_name;
     echo " , ";
@@ -214,7 +205,6 @@ function assign_hours($days){
 
 // needs refactoring: O(n^3)
 function create_schedule($classes){
-  // TODO: decide whether we have 1 or 2-week schedule
   $days = array();  // week 1: 0-6
   $days = array_pad($days, 5, array()); // each day is an array of lecture objects
 
@@ -245,8 +235,33 @@ function create_schedule($classes){
   return $days;
 }
 
+// sorts lectures depending on their time (O(n^2), selection sort, can be refactored to merge sort if handling big data)
+function sort_lectures($day){
+  // for each lecture, time_range in day
+  for($i=0;$i<count($day);$i++){
+    $min_idx = $i;
+
+    for($j=$i+1;$j<count($day);$j++){
+      // compare every day's lecture's statring times
+      if($day[$j][1][0] < $day[$min_idx][1][0]){
+        $min_idx = $j;
+
+        $temp = $day[$min_idx];
+        $day[$min_idx] = $day[$j];
+        $day[$j] = $temp;
+      }
+    }
+  }
+
+  return $day;
+}
+
 function print_weeks($days){
-  // TODO: sort each day's lecture objects by time range (to look better)
+
+  // sort so that it looks better
+  //for($i=0;$i<count($days);$i++){
+  //  $days[$i] = sort_lectures($days[$i]);
+  //}
 
   foreach($days as $idx=>$day){
     switch($idx){
