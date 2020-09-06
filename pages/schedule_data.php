@@ -84,8 +84,8 @@ if(isset($_GET['reset_db'])){
     <p />
 
     Hours the teacher is available <br> (!!!don't give hours with difference less than 3, need at least 3 hours available!!!)<br>
-    From <input type="number" name="start_time" min="8" max="20">
-    To <input type ="number" name="end_time" min="9" max="21">
+    From <input type="number" name="start_time" min="9" max="20">
+    To <input type ="number" name="end_time" min="12" max="21">
     <p />
 
     <input type="submit" name="submit" value="Submit">
