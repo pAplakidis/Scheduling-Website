@@ -164,10 +164,7 @@ function check_worst_case($days, $lecture){
 // get the classes in rooms and then assign hours depending on the available hours of the teachers + the remaining hours left in the day
 function assign_hours($days){
 
-  // days(day(lectures(lecture, hours(start, finish)))) !!!need to meddle with the array a bit!!!
   // foreach $day as $idx=>$lecture: $day[$idx] = array($lecture, hours[start, finish]);
-
-
   // ALGORITHM: go through all lectures in the day and assign each lecture the first hour available + 3 for end
   //            if there is already a lecture in the same room, find it's end time
   //            if it is less than the first avail hour, add the lecture as normal
@@ -176,27 +173,42 @@ function assign_hours($days){
   //                  if the room is empty before the start_time and teacher is avail that time, add it there
   //                  else cannot add room (remove it from the day)
   
-  foreach($days as $day){
+  for($i=0;$i<count($days);$i++){
     $rooms_used = array(); // list of rooms used ($rooms_used[$room_name, $lecture])
 
-    foreach($day as $idx=>$lecture){
-      if(in_array($lecture->room_name, $rooms_used)){
-        // TODO: code this
+    for($j=0;$j<count($days[$i]);$j++){
+
+      if(($idx = array_search($days[$i][$j]->room_name, $rooms_used))){
+        $old_end_time = $rooms_used[$idx][1];
+
+        if($old_time < $days[$i][$j]->hours_avail[0]){
+          $start_time = $days[$i][$j]->hours_avail[0];  // days[i][j] is lecture object
+          $end_time = $start_time + 3;
+        }
+        else if($old_end_time + 3 <= $days[$i][$j]->hours_avail[1]){
+          $start_time = $old_end_time;
+          $end_time = $start_time + 3;
+        }
+        else{
+          echo "Couldn't assign valid time range to lecture: " . $days[$i][$j]->class_name;
+          $days[$i][$j] = NULL;
+        }
+
+        $days[$i][$j] = array($days[$i][$j], array($start_time, $end_time));
+        array_push($rooms_used, array($days[$i][$j][0]->room_name, $end_time));
       }
       // can add wherever we want, no restriction
       else{
-        $start_time = $lecture->hours_avail[0];
+        $start_time = $days[$i][$j]->hours_avail[0];  // days[i][j] is lecture object
         $end_time = $start_time + 3;
 
-        echo "start time: " . $start_time . " end_time: " . $end_time . "<br>";
-        print_r($day[$idx]);
-        echo "<br>";
-        echo "<br>";
-
-        // TODO: FIX BUG HERE, when i print the days they dont get assigned (maybe it is like python, might need a for loop instead)!!!
-        $day[$idx] = array($lecture, array($start_time, $end_time));
-        array_push($rooms_used, array($lecture->room_name, $lecture));
+        $days[$i][$j] = array($days[$i][$j], array($start_time, $end_time));
+        array_push($rooms_used, array($days[$i][$j][0]->room_name, $end_time));  // lecture object is now days[i][j][0] and time range is days[i][j][1]
       }
+      echo "start time: " . $start_time . " end_time: " . $end_time . "<br>";
+      print_r($days[$i][$j]);
+      echo "<br>";
+      echo "<br>";
     }
   }
 
@@ -245,14 +257,18 @@ function print_weeks($days){
 
   foreach($days as $day){
     foreach($day as $block){
-      // block = $lecture, [start, end]
-      //print_r($block[0]);
-      //$block[0]->print_data(); // print the data of the lecture
-      //echo $block[1][0] . " - " . $block[1][1] . ": ";
-      //echo "-------------------";
+      if($block != NULL){
+        // TODO: print these correctly (ERROR 500 HERE)
 
-      echo "<br><br>";
-      print_r($block);
+        // block = $lecture, [start, end]
+        //print_r($block[0]);
+        //$block[0]->print_data(); // print the data of the lecture
+        //echo $block[1][0] . " - " . $block[1][1] . ": ";
+        //echo "-------------------";
+
+        echo "<br><br>";
+        print_r($block);
+      }
     }
     // echo "<br>====================<br>";
   }
