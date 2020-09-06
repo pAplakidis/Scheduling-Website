@@ -30,9 +30,11 @@ class Lecture{
 
   // TODO: print to look like a schedule (maybe add header tags to name)
   function print_data(){
-    echo $class_name;
-    echo "<br>";
-    echo $room_name;
+    echo $this->class_name;
+    echo " , ";
+    echo $this->teacher_name;
+    echo " , ";
+    echo $this->room_name;
     echo "<br>";
   }
 }
@@ -67,7 +69,6 @@ function find_opt_day($days, $idxs, $days_avail){
   array_multisort(array_column($sorted_idxs, "lectures"), SORT_ASC, $sorted_idxs);
   $best_day = $sorted_idxs[0]["idx"];
  
-  echo "==Preferred Day: " . $best_day . '<br><br>';
   return $best_day+1;
 }
 
@@ -205,10 +206,6 @@ function assign_hours($days){
         $days[$i][$j] = array($days[$i][$j], array($start_time, $end_time));
         array_push($rooms_used, array($days[$i][$j][0]->room_name, $end_time));  // lecture object is now days[i][j][0] and time range is days[i][j][1]
       }
-      echo "start time: " . $start_time . " end_time: " . $end_time . "<br>";
-      print_r($days[$i][$j]);
-      echo "<br>";
-      echo "<br>";
     }
   }
 
@@ -217,13 +214,11 @@ function assign_hours($days){
 
 // needs refactoring: O(n^3)
 function create_schedule($classes){
-  $days = array();  // week 1: 0-6, week2: 7-13
-  $days = array_pad($days, 14, array()); // each day is an array of lecture objects
+  // TODO: decide whether we have 1 or 2-week schedule
+  $days = array();  // week 1: 0-6
+  $days = array_pad($days, 5, array()); // each day is an array of lecture objects
 
-  $i = 0;
   foreach($classes as $lecture){
-    echo "lecture " . $i . ": " . $lecture->class_name . "<br>";
-    $i++;
 
     if($day_idx = room_avail_all_day($days, $lecture->room_name, $lecture->days_avail)){
       array_push($days[$day_idx-1], $lecture);
@@ -251,26 +246,37 @@ function create_schedule($classes){
 }
 
 function print_weeks($days){
-  echo "<br><br>";
-  print_r($days);
-  // TODO: order each day's lecture objects by time range
+  // TODO: sort each day's lecture objects by time range (to look better)
 
-  foreach($days as $day){
+  foreach($days as $idx=>$day){
+    switch($idx){
+      case 0:
+        echo "<h2>Monday</h2>";
+        break;
+      case 1:
+        echo "<h2>Tuesday</h2>";
+        break;
+      case 2:
+        echo "<h2>Wednesday</h2>";
+        break;
+      case 3:
+        echo "<h2>Thursday</h2>";
+        break;
+      case 4:
+        echo "<h2>Friday</h2>";
+        break;
+    }
+
     foreach($day as $block){
       if($block != NULL){
-        // TODO: print these correctly (ERROR 500 HERE)
-
         // block = $lecture, [start, end]
-        //print_r($block[0]);
-        //$block[0]->print_data(); // print the data of the lecture
-        //echo $block[1][0] . " - " . $block[1][1] . ": ";
-        //echo "-------------------";
+        echo "<b>" . $block[1][0] . "</b> - " . "<b>" . $block[1][1] . "</b>: ";
+        $block[0]->print_data(); // print the data of the lecture
+        echo "-------------------<br><br>";
 
-        echo "<br><br>";
-        print_r($block);
       }
     }
-    // echo "<br>====================<br>";
+    echo "<br>====================<br><br>";
   }
 }
 
