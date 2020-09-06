@@ -1,6 +1,6 @@
 -- Create and use database
- create database scheduling_website;
- use scheduling_website;
+create database scheduling_website;
+use scheduling_website;
 
 -- Create table classes that take place in the university every week
 create table if not exists classes(
