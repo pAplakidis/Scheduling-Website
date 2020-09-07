@@ -1,0 +1,29 @@
+.program {
+    border: 2px red solid;
+    color: black;
+    display: flex;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.list {
+    background-color: purple;
+    flex-basis: 100%;
+    flex-grow: 1;
+    padding:10px;
+}
+
+.draggable {
+    background-color: #4AAE98;
+    font-weight: normal;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.dropzone {
+    background-color: pink;
+    flex-basis: 100%;
+    flex-grow: 1;
+    padding: 10px;
+}
