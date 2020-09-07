@@ -16,7 +16,6 @@ for(let i = 0; i < draggables.length; i++){
 
     item.addEventListener('dragend', function(){
         setTimeout(function(){
-         //this.className = 'draggable';
          draggedDraggable.style.display = 'block;'
          draggedDraggable = null;
         }, 0);
@@ -43,7 +42,4 @@ for(let i = 0; i < draggables.length; i++){
          });
     }
 }
-
-
-
 
