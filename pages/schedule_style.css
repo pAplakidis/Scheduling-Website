@@ -1,5 +1,10 @@
-.program {
-    border: 2px red solid;
+body{
+    background-color: burlywood;
+}
+h1{
+    text-align: center;
+}
+.schedule {
     color: black;
     display: flex;
     font-family: sans-serif;
@@ -7,7 +12,7 @@
 }
 
 .list {
-    background-color: purple;
+    background-color: burlywood;
     flex-basis: 100%;
     flex-grow: 1;
     padding:10px;
@@ -22,7 +27,7 @@
 }
 
 .dropzone {
-    background-color: pink;
+    background-color: whitesmoke;
     flex-basis: 100%;
     flex-grow: 1;
     padding: 10px;
