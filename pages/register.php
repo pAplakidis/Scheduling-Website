@@ -38,8 +38,7 @@ if(isset($_POST['register']))
     }
     else
     {
-        echo "User Already Exists!";
-        header("Location: menu.html");
+        echo "Username Already Exists!";
     }
 }
 

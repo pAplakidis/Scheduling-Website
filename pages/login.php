@@ -16,8 +16,7 @@ if(isset($_POST['login']))
         }
         else
         {
-            echo "Incorrect Password";  // for debugging
-            //echo "Incorrect Credentials";
+            echo "Incorrect Credentials";
         }
     }
     else
@@ -25,8 +24,7 @@ if(isset($_POST['login']))
         // For security purposes, the ERROR message is not
         // accurate to not indicate whether the client has
         // found a correct username or not
-        //echo "Incorrect Credentials";
-        echo "Username not found";  // for debugging
+        echo "Incorrect Credentials";
     }
 }
 
