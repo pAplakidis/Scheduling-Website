@@ -16,6 +16,7 @@ h1{
     flex-basis: 100%;
     flex-grow: 1;
     padding:10px;
+    transition: all o.2s linear;
 }
 
 .draggable {
@@ -28,6 +29,7 @@ h1{
 
 .dropzone {
     background-color: whitesmoke;
+    font-weight: normal;
     flex-basis: 100%;
     flex-grow: 1;
     padding: 10px;
